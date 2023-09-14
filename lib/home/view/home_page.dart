@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_todos/collections/view/collections_page.dart';
 import 'package:flutter_todos/edit_todo/edit_todo.dart';
 import 'package:flutter_todos/home/home.dart';
 import 'package:flutter_todos/stats/stats.dart';
@@ -27,16 +28,20 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       body: IndexedStack(
         index: selectedTab.index,
-        children: const [TodosOverviewPage(), StatsPage()],
+        children: const [
+          TodosOverviewPage(),
+          StatsPage(),
+          CollectionsPage(),
+        ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         key: const Key('homeView_addTodo_floatingActionButton'),
-        onPressed: () => Navigator.of(context).push(EditTodoPage.route()),
+        onPressed: () => Navigator.of(context).push(
+          EditTodoPage.route(),
+        ),
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -49,6 +54,11 @@ class HomeView extends StatelessWidget {
               groupValue: selectedTab,
               value: HomeTab.stats,
               icon: const Icon(Icons.show_chart_rounded),
+            ),
+            _HomeTabButton(
+              groupValue: selectedTab,
+              value: HomeTab.collections,
+              icon: const Icon(Icons.collections_outlined),
             ),
           ],
         ),
@@ -73,8 +83,7 @@ class _HomeTabButton extends StatelessWidget {
     return IconButton(
       onPressed: () => context.read<HomeCubit>().setTab(value),
       iconSize: 32,
-      color:
-          groupValue != value ? null : Theme.of(context).colorScheme.secondary,
+      color: groupValue != value ? null : Theme.of(context).colorScheme.secondary,
       icon: icon,
     );
   }
